@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fonts</key>
+	<dict>
+		<key>regular</key>
+		<string>PingFangSC-Regular</string>
+		<key>semibold</key>
+		<string>PingFangSC-Semibold</string>
+		<key>medium</key>
+		<string>PingFangSC-Medium</string>
+		<key>light</key>
+		<string>PingFangSC-Light</string>
+		<key>thin</key>
+		<string>PingFangSC-Thin</string>
+	</dict>
+	<key>colors</key>
+	<dict>
+		<key>major</key>
+		<string>#449DD9</string>
+		<key>heavy</key>
+		<string>#3E3E3E</string>
+		<key>medium</key>
+		<string>#B1B1B1</string>
+		<key>light</key>
+		<string>F3F3F3</string>
+		<key>highlight</key>
+		<string>#FFFFFF</string>
+		<key>destructive</key>
+		<string>#F22A2A</string>
+		<key>background</key>
+		<string>#FFFFFF    </string>
+		<key>border</key>
+		<string>#F3F3F3</string>
+		<key>separator</key>
+		<string>#DEDEDE</string>
+		<key>placeholder</key>
+		<string>#E2E2E2</string>
+		<key>dark</key>
+		<string>#000000</string>
+		<key>green</key>
+		<string>#29C74E</string>
+		<key>orange</key>
+		<string>#FFBB00</string>
+		<key>blue</key>
+		<string>#2394FB</string>
+	</dict>
+</dict>
+</plist>
