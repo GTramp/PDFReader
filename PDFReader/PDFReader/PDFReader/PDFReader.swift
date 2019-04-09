@@ -8,14 +8,15 @@
 
 import UIKit
 import SnapKit
+import PDFKit
 
 class PDFReader: UINavigationController {
 
     /// 构建
     ///
-    /// - Parameter url: URL
-    convenience init(url: URL) {
-        self.init(rootViewController: PDFViewController.init(url: url))
+    /// - Parameter fileUrl: URL
+    convenience init(fileUrl: URL) {
+        self.init(rootViewController: PDFViewController.init(fileUrl: fileUrl))
     }
     
     /// 构建
@@ -37,7 +38,7 @@ class PDFReader: UINavigationController {
 // MARK: - PDFViewController
 
 /// PDFViewController
-class PDFViewController: UIViewController {
+fileprivate class PDFViewController: UIViewController {
     
     // MARK: - 私有属性
     
@@ -107,13 +108,32 @@ class PDFViewController: UIViewController {
         return _tooblbar
     }()
     
+    /// 隐藏home 指示器
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+    
+    // PDFView
+    private lazy var pdfView: PDFView = {
+        let _pdfView = PDFView.init()
+        _pdfView.autoScales = true
+        _pdfView.displayMode = .singlePageContinuous
+        _pdfView.displayDirection = .vertical
+        _pdfView.interpolationQuality = .high
+        _pdfView.delegate = self
+        return _pdfView
+    }()
+    
+    
     // MARK: - 生命周期
     
     /// 构建
     ///
-    /// - Parameter url: URL
-    convenience init(url:URL) {
+    /// - Parameter fileUrl: URL
+    convenience init(fileUrl:URL) {
         self.init()
+        // 初始化
+        pdfView.document = PDFDocument.init(url: fileUrl)
     }
     
     /// viewDidLoad
@@ -121,6 +141,13 @@ class PDFViewController: UIViewController {
         super.viewDidLoad()
         // 初始化
         initialize()
+        // 滚动到初始位置
+        scrollToInitial()
+    }
+    
+    /// 析构函数
+    deinit {
+       print("The PDFViewController has been destoryed ...")
     }
 }
 
@@ -132,11 +159,19 @@ extension PDFViewController {
         navigationItem.rightBarButtonItem = closeItem
         navigationItem.leftBarButtonItems = [thumbnailItem,outlineItem,rotateItem]
         navigationItem.title = "预览"
+        navigationController?.navigationBar.isTranslucent = false
         
         // 布局
+       view.addSubview(pdfView)
+        pdfView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
+        
         view.addSubview(toolbar)
+        view.bringSubviewToFront(toolbar)
         toolbar.snp.makeConstraints{
             $0.left.right.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview()
             $0.height.equalTo(64.0)
         }
     }
@@ -153,7 +188,24 @@ extension PDFViewController {
     /// - Parameter sender: UIButton
     @objc private func rotateActionHandler(_ sender: UIButton) {
         sender.isSelected.toggle()
-        
+        var index: Int = 0
+        // 记录当前位置
+        if let page = pdfView.currentPage {
+            index = pdfView.document?.index(for: page) ?? 0
+        }
+        // 更新排列方向
+        switch pdfView.displayDirection {
+        case .vertical:
+            pdfView.displayDirection = .horizontal
+        case .horizontal:
+            pdfView.displayDirection = .vertical
+        default: break
+        }
+        // 滚动到当前位置
+        if let document = self.pdfView.document,  let page = document.page(at: index) {
+            let bounds = page.bounds(for: self.pdfView.displayBox)
+            self.pdfView.go(to: CGRect(x: 0, y: bounds.height, width: 1.0, height: 1.0), on: page)
+        }
     }
     
     ///  提纲操作
@@ -162,4 +214,19 @@ extension PDFViewController {
     @objc private func outlineActionHandler(_ sender: UIButton) {
         
     }
+    
+    /// 滚动到初始位置
+    @objc private func scrollToInitial() {
+        DispatchQueue.main.async {
+            if let document = self.pdfView.document,  let firstPage = document.page(at: 0) {
+                let firstPageBounds = firstPage.bounds(for: self.pdfView.displayBox)
+                self.pdfView.go(to: CGRect(x: 0, y: firstPageBounds.height, width: 1.0, height: 1.0), on: firstPage)
+            }
+        }
+    }
+}
+
+// MARK: - PDFViewDelegate
+extension PDFViewController: PDFViewDelegate {
+    
 }

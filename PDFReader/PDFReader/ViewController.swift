@@ -12,9 +12,10 @@ class ViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        let reader = PDFReader.init(url: URL.init(string: "xxxxxxx")!)
+        guard let fileUrl = Bundle.main.url(forResource: "objccn-core-data.pdf", withExtension: nil) else { return }
+        let reader = PDFReader.init(fileUrl: fileUrl)
         present(reader, animated: true, completion: nil)
     }
-
+    
 }
 

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -34,6 +34,7 @@
 		C7A5DE77225B864F00A9C1EC /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A5DE62225B864E00A9C1EC /* UserDefaults+Extensions.swift */; };
 		C7A5DE78225B864F00A9C1EC /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A5DE63225B864E00A9C1EC /* URL+Extensions.swift */; };
 		C7A5DE79225B864F00A9C1EC /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A5DE64225B864E00A9C1EC /* Bundle+Extensions.swift */; };
+		C7CE89C4225C2E9F00332AD4 /* objccn-core-data.pdf in Resources */ = {isa = PBXBuildFile; fileRef = C7CE89C3225C2E9F00332AD4 /* objccn-core-data.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,7 @@
 		C7A5DE62225B864E00A9C1EC /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		C7A5DE63225B864E00A9C1EC /* URL+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		C7A5DE64225B864E00A9C1EC /* Bundle+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
+		C7CE89C3225C2E9F00332AD4 /* objccn-core-data.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "objccn-core-data.pdf"; sourceTree = "<group>"; };
 		E94BD9C02967006433BDE003 /* Pods-PDFReader.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDFReader.release.xcconfig"; path = "Target Support Files/Pods-PDFReader/Pods-PDFReader.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,7 +98,6 @@
 				36745FD00E0DE65DC9D82FB2 /* Pods-PDFReader.debug.xcconfig */,
 				E94BD9C02967006433BDE003 /* Pods-PDFReader.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -129,6 +130,7 @@
 				C7A5DE33225B83EF00A9C1EC /* Main.storyboard */,
 				C7A5DE36225B83F100A9C1EC /* Assets.xcassets */,
 				C7A5DE38225B83F100A9C1EC /* LaunchScreen.storyboard */,
+				C7CE89C3225C2E9F00332AD4 /* objccn-core-data.pdf */,
 				C7A5DE3B225B83F100A9C1EC /* Info.plist */,
 			);
 			path = PDFReader;
@@ -236,6 +238,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7CE89C4225C2E9F00332AD4 /* objccn-core-data.pdf in Resources */,
 				C7A5DE3A225B83F100A9C1EC /* LaunchScreen.storyboard in Resources */,
 				C7A5DE4B225B864500A9C1EC /* theme.default.plist in Resources */,
 				C7A5DE37225B83F100A9C1EC /* Assets.xcassets in Resources */,
