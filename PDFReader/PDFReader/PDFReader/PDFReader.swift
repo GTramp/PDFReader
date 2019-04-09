@@ -54,7 +54,7 @@ fileprivate class PDFViewController: UIViewController {
     private lazy var thumbnailItem: UIBarButtonItem = {
         let _button = UIButton.init(type: .custom)
         _button.setImage(UIImage.init(named: "pdf_thumbnail")?.tint(with: Theme.shared.color(of: .heavy)), for: .normal)
-        // _button.addTarget(self, action: #selector(closeActionHandler(_:)), for: .touchUpInside)
+         _button.addTarget(self, action: #selector(thumbnailActionHandler(_:)), for: .touchUpInside)
         return UIBarButtonItem.init(customView: _button)
     }()
     
@@ -71,7 +71,7 @@ fileprivate class PDFViewController: UIViewController {
     private lazy var outlineItem: UIBarButtonItem = {
         let _button = UIButton.init(type: .custom)
         _button.setImage(UIImage.init(named: "pdf_outline")?.tint(with: Theme.shared.color(of: .heavy)), for: .normal)
-        // _button.addTarget(self, action: #selector(closeActionHandler(_:)), for: .touchUpInside)
+         _button.addTarget(self, action: #selector(outlineActionHandler(_:)), for: .touchUpInside)
         return UIBarButtonItem.init(customView: _button)
     }()
     
@@ -83,7 +83,7 @@ fileprivate class PDFViewController: UIViewController {
         _button.layer.cornerRadius = 18.0
         _button.backgroundColor = Theme.shared.color(of: .heavy).alpha(0.8)
         _button.layer.masksToBounds = true
-        // _button.addTarget(self, action: #selector(closeActionHandler(_:)), for: .touchUpInside)
+         _button.addTarget(self, action: #selector(moreActionHandler(_:)), for: .touchUpInside)
         return UIBarButtonItem.init(customView: _button)
     }()
     
@@ -95,7 +95,7 @@ fileprivate class PDFViewController: UIViewController {
         _button.backgroundColor = Theme.shared.color(of: .heavy).alpha(0.8)
         _button.layer.cornerRadius = 18.0
         _button.layer.masksToBounds = true
-        // _button.addTarget(self, action: #selector(closeActionHandler(_:)), for: .touchUpInside)
+         _button.addTarget(self, action: #selector(shareActionHandler(_:)), for: .touchUpInside)
         return UIBarButtonItem.init(customView: _button)
     }()
     
@@ -146,8 +146,19 @@ fileprivate class PDFViewController: UIViewController {
     /// - Parameter fileUrl: URL
     convenience init(fileUrl:URL) {
         self.init()
-        // 初始化
-        pdfView.document = PDFDocument.init(url: fileUrl)
+        guard let document = PDFDocument.init(url: fileUrl) else { return }
+        if document.isLocked {
+            // 提示用解锁
+            unlock(document: document, message: nil) {[unowned self] (success, document) in
+                guard success else {
+                    self.dismiss(animated: true, completion: nil)
+                    return
+                }
+                self.pdfView.document = document
+            }
+        } else {
+            pdfView.document = document
+        }
     }
     
     /// viewDidLoad
@@ -183,10 +194,11 @@ extension PDFViewController {
     /// 初始化
     private func initialize() {
         view.backgroundColor = UIColor.white
-        navigationItem.rightBarButtonItem = closeItem
-        navigationItem.leftBarButtonItems = [thumbnailItem,outlineItem,rotateItem]
+        navigationItem.rightBarButtonItems = [thumbnailItem,UIBarButtonItem.fixed(width: 10.0),outlineItem, UIBarButtonItem.fixed(width: 10.0),rotateItem]
+        navigationItem.leftBarButtonItem = closeItem
         navigationItem.title = "预览"
         navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.tintColor = Theme.shared.color(of: .heavy)
         
         // 布局
        view.addSubview(pdfView)
@@ -243,10 +255,33 @@ extension PDFViewController {
         countLabel.text = "\(document.index(for: page) + 1)/\(document.pageCount)"
     }
     
+    /// 缩略图操作
+    ///
+    /// - Parameter sender: UIButton
+    @objc private func thumbnailActionHandler(_ sender: UIButton) {
+        let controller = PDFThumbnailViewController.init()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     ///  提纲操作
     ///
     /// - Parameter sender: UIButton
     @objc private func outlineActionHandler(_ sender: UIButton) {
+        let controller = PDFOutlineViewController.init()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    /// 更多操作
+    ///
+    /// - Parameter sender: UIButton
+    @objc private func moreActionHandler(_ sender: UIButton) {
+        
+    }
+    
+    /// 分享操作
+    ///
+    /// - Parameter sender: UIButton
+    @objc private func shareActionHandler(_ sender: UIButton) {
         
     }
     
@@ -268,6 +303,36 @@ extension PDFViewController {
     @objc private func pageChangedNotifyHandler(_ notification: Notification) {
         // 更新页码
         updatePage()
+    }
+    
+    /// 解锁加密文件
+    ///
+    /// - Parameters:
+    ///   - document: PDFDocument
+    ///   - message: 提示信息
+    ///   - completion: 完成回调
+    @objc private func unlock(document: PDFDocument, message: String? = nil ,completion: @escaping((Bool, PDFDocument)->Void)) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController.init(title: "加密文件", message: message, preferredStyle: .alert)
+            alert.view.tintColor = Theme.shared.color(of: .major)
+            alert.addTextField { (textFileld) in
+                textFileld.tintColor = Theme.shared.color(of: .major)
+                textFileld.placeholder = "请输入解锁密码"
+            }
+            alert.addAction(UIAlertAction.init(title: "取消", style: .default, handler: { (_) in
+                completion(false, document)
+            }))
+            alert.addAction(UIAlertAction.init(title: "确定", style: .default, handler: { [unowned self](_) in
+                guard let password = alert.textFields?.first?.text , password.isEmpty == false else { return }
+                if document.unlock(withPassword: password) {
+                    completion(true, document)
+                } else {
+                    self.unlock(document: document, message: "密码错误", completion: completion)
+                }
+            }))
+            // 展示
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }
 

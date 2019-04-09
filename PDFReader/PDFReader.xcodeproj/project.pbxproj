@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		42AC598F268E8D49E7EA37C4 /* Pods_PDFReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC83EFFEC32CE94B905F4D80 /* Pods_PDFReader.framework */; };
+		C76151A0225C53EC001335F6 /* PDFOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C761519F225C53EC001335F6 /* PDFOutlineViewController.swift */; };
+		C76151A2225C5576001335F6 /* PDFThumbnailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C76151A1225C5576001335F6 /* PDFThumbnailViewController.swift */; };
 		C7A5DE30225B83EF00A9C1EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A5DE2F225B83EF00A9C1EC /* AppDelegate.swift */; };
 		C7A5DE32225B83EF00A9C1EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A5DE31225B83EF00A9C1EC /* ViewController.swift */; };
 		C7A5DE35225B83EF00A9C1EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7A5DE33225B83EF00A9C1EC /* Main.storyboard */; };
@@ -40,6 +42,8 @@
 /* Begin PBXFileReference section */
 		36745FD00E0DE65DC9D82FB2 /* Pods-PDFReader.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PDFReader.debug.xcconfig"; path = "Target Support Files/Pods-PDFReader/Pods-PDFReader.debug.xcconfig"; sourceTree = "<group>"; };
 		BC83EFFEC32CE94B905F4D80 /* Pods_PDFReader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PDFReader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C761519F225C53EC001335F6 /* PDFOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFOutlineViewController.swift; sourceTree = "<group>"; };
+		C76151A1225C5576001335F6 /* PDFThumbnailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFThumbnailViewController.swift; sourceTree = "<group>"; };
 		C7A5DE2C225B83EF00A9C1EC /* PDFReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PDFReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7A5DE2F225B83EF00A9C1EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C7A5DE31225B83EF00A9C1EC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				C7A5DE42225B845000A9C1EC /* PDFReader.swift */,
+				C761519F225C53EC001335F6 /* PDFOutlineViewController.swift */,
+				C76151A1225C5576001335F6 /* PDFThumbnailViewController.swift */,
 				C7A5DE44225B860B00A9C1EC /* PDFReader.xcassets */,
 			);
 			path = PDFReader;
@@ -297,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7A5DE76225B864E00A9C1EC /* UIBarButtonItem+Extensions.swift in Sources */,
+				C76151A2225C5576001335F6 /* PDFThumbnailViewController.swift in Sources */,
 				C7A5DE32225B83EF00A9C1EC /* ViewController.swift in Sources */,
 				C7A5DE72225B864E00A9C1EC /* CNContact+Extensions.swift in Sources */,
 				C7A5DE4C225B864500A9C1EC /* Theme.swift in Sources */,
@@ -306,6 +313,7 @@
 				C7A5DE67225B864E00A9C1EC /* UIButton+Extensions.swift in Sources */,
 				C7A5DE6C225B864E00A9C1EC /* Math+Extensions.swift in Sources */,
 				C7A5DE79225B864F00A9C1EC /* Bundle+Extensions.swift in Sources */,
+				C76151A0225C53EC001335F6 /* PDFOutlineViewController.swift in Sources */,
 				C7A5DE43225B845000A9C1EC /* PDFReader.swift in Sources */,
 				C7A5DE77225B864F00A9C1EC /* UserDefaults+Extensions.swift in Sources */,
 				C7A5DE30225B83EF00A9C1EC /* AppDelegate.swift in Sources */,
