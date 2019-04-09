@@ -268,7 +268,8 @@ extension PDFViewController {
     ///
     /// - Parameter sender: UIButton
     @objc private func outlineActionHandler(_ sender: UIButton) {
-        let controller = PDFOutlineViewController.init()
+        let controller = PDFOutlineViewController.init(document: pdfView.document)
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -337,8 +338,8 @@ extension PDFViewController {
     }
 }
 
-// MARK: - PDFThumbnailViewControllerDelegate
-extension PDFViewController: PDFThumbnailViewControllerDelegate {
+// MARK: - PDFThumbnailViewControllerDelegate &
+extension PDFViewController: PDFThumbnailViewControllerDelegate, PDFOutlineViewControllerDelegate {
     
     internal func thumbnailViewController(_ controller: PDFThumbnailViewController, didSelectedAt indexPath: IndexPath) {
         controller.pop(animated: true)
@@ -349,4 +350,15 @@ extension PDFViewController: PDFThumbnailViewControllerDelegate {
         updatePage()
     }
     
+    internal func outlineViewController(_ controller: PDFOutlineViewController, didSelectedAt indexPath: IndexPath) {
+        controller.pop(animated: true)
+        guard let outline = pdfView.document?.outlineRoot?.child(at: indexPath.section)?.child(at: indexPath.row), let destination = outline.destination else { return }
+        pdfView.go(to: destination)
+        if let page = pdfView.currentPage {
+            let bounds = page.bounds(for: pdfView.displayBox)
+            pdfView.go(to: CGRect(x: 0, y: bounds.height, width: 1.0, height: 1.0), on: page)
+        }
+        // 更新页码
+        updatePage()
+    }
 }
