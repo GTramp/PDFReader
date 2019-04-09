@@ -40,6 +40,7 @@ class PDFReader: UINavigationController {
 /// PDFViewController
 fileprivate class PDFViewController: UIViewController {
     
+    
     // MARK: - 私有属性
     
     /// 关闭按钮
@@ -277,7 +278,16 @@ extension PDFViewController {
     ///
     /// - Parameter sender: UIButton
     @objc private func moreActionHandler(_ sender: UIButton) {
+        guard let fileUrl = pdfView.document?.documentURL else { return }
+        let activity = UIActivityViewController.init(activityItems: [fileUrl], applicationActivities: nil)
         
+        if UI_USER_INTERFACE_IDIOM() == .phone {
+            present(activity, animated: true, completion: nil)
+        } else {
+            activity.modalPresentationStyle = .popover
+            activity.popoverPresentationController?.barButtonItem = moreItem
+            present(activity, animated: true, completion: nil)
+        }
     }
     
     /// 分享操作
