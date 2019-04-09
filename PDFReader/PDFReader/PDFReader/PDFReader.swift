@@ -147,8 +147,8 @@ fileprivate class PDFViewController: UIViewController {
     convenience init(fileUrl:URL) {
         self.init()
         guard let document = PDFDocument.init(url: fileUrl) else { return }
+        // 解锁加密文件
         if document.isLocked {
-            // 提示用解锁
             unlock(document: document, message: nil) {[unowned self] (success, document) in
                 guard success else {
                     self.dismiss(animated: true, completion: nil)
@@ -259,7 +259,8 @@ extension PDFViewController {
     ///
     /// - Parameter sender: UIButton
     @objc private func thumbnailActionHandler(_ sender: UIButton) {
-        let controller = PDFThumbnailViewController.init()
+        let controller = PDFThumbnailViewController.init(document: pdfView.document)
+        controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -336,3 +337,16 @@ extension PDFViewController {
     }
 }
 
+// MARK: - PDFThumbnailViewControllerDelegate
+extension PDFViewController: PDFThumbnailViewControllerDelegate {
+    
+    internal func thumbnailViewController(_ controller: PDFThumbnailViewController, didSelectedAt indexPath: IndexPath) {
+        controller.pop(animated: true)
+        guard let document = pdfView.document,  let page = document.page(at: indexPath.item) else  { return }
+        let bounds = page.bounds(for: pdfView.displayBox)
+        pdfView.go(to: CGRect(x: 0, y: bounds.height, width: 1.0, height: 1.0), on: page)
+        // 更新页码
+        updatePage()
+    }
+    
+}
