@@ -102,10 +102,25 @@ fileprivate class PDFViewController: UIViewController {
     /// toolbar
     private lazy var toolbar: UIToolbar = {
         let _tooblbar = UIToolbar.init()
-        _tooblbar.items = [UIBarButtonItem.flexible(), shareItem, UIBarButtonItem.fixed(width: 10.0), moreItem]
+        _tooblbar.items = [UIBarButtonItem.init(customView: countLabel),UIBarButtonItem.flexible(), shareItem, UIBarButtonItem.fixed(width: 10.0), moreItem]
         _tooblbar.setShadowImage(UIImage.init(), forToolbarPosition: .any)
         _tooblbar.setBackgroundImage(UIImage.init(), forToolbarPosition: .any, barMetrics: .default)
         return _tooblbar
+    }()
+    
+    /// 页码
+    private lazy var countLabel: UILabel = {
+        let _label = UILabel.init()
+        _label.font = Theme.shared.font(of: 15.0)
+        _label.textColor = Theme.shared.color(of: .highlight)
+        _label.backgroundColor = Theme.shared.color(of: .heavy).alpha(0.8)
+        _label.bounds = CGRect.init(x: 0.0, y: 0.0, width: 72.0, height: 36.0)
+        _label.layer.cornerRadius = 18.0
+        _label.layer.masksToBounds = true
+        _label.text = "0/0"
+        _label.textAlignment = .center
+        _label.adjustsFontSizeToFitWidth = true
+        return _label
     }()
     
     /// 隐藏home 指示器
@@ -120,7 +135,6 @@ fileprivate class PDFViewController: UIViewController {
         _pdfView.displayMode = .singlePageContinuous
         _pdfView.displayDirection = .vertical
         _pdfView.interpolationQuality = .high
-        _pdfView.delegate = self
         return _pdfView
     }()
     
@@ -143,6 +157,19 @@ fileprivate class PDFViewController: UIViewController {
         initialize()
         // 滚动到初始位置
         scrollToInitial()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 添加通知
+        NotificationCenter.default.addObserver(self, selector: #selector(pageChangedNotifyHandler(_:)), name: .PDFViewPageChanged, object: nil)
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // 移除KVO
+        NotificationCenter.default.removeObserver(self)
     }
     
     /// 析构函数
@@ -206,6 +233,14 @@ extension PDFViewController {
             let bounds = page.bounds(for: self.pdfView.displayBox)
             self.pdfView.go(to: CGRect(x: 0, y: bounds.height, width: 1.0, height: 1.0), on: page)
         }
+        // 更新页码
+        updatePage()
+    }
+    
+    /// 更新页码
+    private func updatePage(){
+        guard let document = pdfView.document, let page = pdfView.currentPage else { return }
+        countLabel.text = "\(document.index(for: page) + 1)/\(document.pageCount)"
     }
     
     ///  提纲操作
@@ -222,11 +257,17 @@ extension PDFViewController {
                 let firstPageBounds = firstPage.bounds(for: self.pdfView.displayBox)
                 self.pdfView.go(to: CGRect(x: 0, y: firstPageBounds.height, width: 1.0, height: 1.0), on: firstPage)
             }
+            // 更新页码
+            self.updatePage()
         }
+    }
+    
+    /// 页面跳转
+    ///
+    /// - Parameter notification: Notification
+    @objc private func pageChangedNotifyHandler(_ notification: Notification) {
+        // 更新页码
+        updatePage()
     }
 }
 
-// MARK: - PDFViewDelegate
-extension PDFViewController: PDFViewDelegate {
-    
-}
